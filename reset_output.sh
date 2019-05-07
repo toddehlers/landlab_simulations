@@ -9,6 +9,11 @@ rm NC/*
 rm SA/*
 rm SoilDepth/*
 rm dd/*
+rm dynveg_lpjguess.log
+rm Multiplot_absolut.png
+rm vegi_P_bugfix.png
+
+
 
 mkdir ACC
 mkdir CSVOutput
@@ -19,4 +24,3 @@ mkdir NC
 mkdir SA
 mkdir SoilDepth
 mkdir dd
-
