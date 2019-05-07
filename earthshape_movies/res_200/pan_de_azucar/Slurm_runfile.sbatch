@@ -1,0 +1,20 @@
+#!/bin/bash -l
+## Example run script for SLURM
+
+## General configuration options
+#SBATCH -J video_sim1
+#SBATCH -o myjob.%j.%N.out
+#SBATCH -e myjob.%j.%N_Err.out
+#SBATCH --mail-user=willi.kappler@uni-tuebingen.de
+#SBATCH --mail-type=ALL
+
+## Machine and CPU configuration
+## Number of tasks per job:
+#SBATCH -n 1
+## Number of nodes:
+#SBATCH -N 1
+
+module load landlab
+
+python3 ./runfile_textinput.py
+
