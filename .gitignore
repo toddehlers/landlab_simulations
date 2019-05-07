@@ -1,0 +1,18 @@
+# Ignore output folders
+ACC
+CSVOutput
+dd
+DEM
+DHDT
+Ksn
+NC
+SA
+SoilDepth
+
+# Ignore output files
+*.png
+*.log
+
+# Ignore python cache
+__pycache__
+
