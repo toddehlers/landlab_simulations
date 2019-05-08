@@ -33,9 +33,9 @@ dx    = 100 #spacing between nodes
 totalT = 10000000.0  #total model runtime
 ssT    = 10000000.0  #spin-up time before sin-modulation, set to same value as totalT for steady-state-simulations
 sfT    = 10000000.0  #spin-up time before step-change-modulation, set to same value as totalT for steady-state-simulations
-dt     =    10000.0
+dt     =    1000.0
 #Uplift
-upliftRate = 0.00001 #m/yr, Topographic uplift rate
+upliftRate = 0.001 #m/yr, Topographic uplift rate
 
 #Surface Processes
 #Linear Diffusion:
@@ -43,10 +43,10 @@ linDiffBase = 3e-1 #m2/yr, base linear diffusivity for bare-bedrock
 alphaDiff   = 0.3  #Scaling factor for vegetation-influence (see Instabulluoglu and Bras 2005)
 
 #Fluvial Erosion:
-ksp = 2e-7 #base fluvial erodibility for bare-bedrock
+ksp = 2e-6 #base fluvial erodibility for bare-bedrock
 msp = 0.5  #m factor from SPL
 nsp = 1    #n factor from SPL
-thresholdSP = 0.0 #threshold erosion-factor from SPL
+thresholdSP = 0.0004 #threshold erosion-factor from SPL
 critArea    = 1e6 #L^2, Minimum Area which the steepness-calculator assumes for channel formation.
 aqDens      = 1000 #Kg/m^3, density of water
 grav        = 9.81 #m/s^2, acceleration of gravity
