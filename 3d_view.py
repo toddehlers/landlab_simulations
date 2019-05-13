@@ -22,12 +22,16 @@ mpl.rcParams['xtick.color'] = font_color
 mpl.rcParams['ytick.color'] = font_color
 mpl.rcParams['savefig.facecolor'] = bg_color
 
-# mpl.rcParams['ztick.color'] = font_color
+# Clean up file names:
+# mmv 'output*__*.nc' 'output_#2.nc'
+#
+# Create movie:
+# ffmpeg  -framerate 5 -i output_02%d.png -c:v libx264 -profile:v high -crf 20 -pix_fmt yuv420p -s 800x600 output.mp4
 
 
-def process(filename):
+def process(filename, z_max, z_scale):
     print('processing file: {}'.format(filename))
-    basefile, extension = os.path.splitext(filename)
+    file_base, file_extension = os.path.splitext(filename)
 
     nc_file = Dataset(filename, mode='r')
 
@@ -40,16 +44,23 @@ def process(filename):
     # print('x: {}, y: {}, z: {}'.format(len(x), len(y), len(z)))
 
     z_min = 0.0
-    z_max = 0.8 # Azucar
-    z_max = 2.0 # Nahuelbuta
+
+    # For Azucar: 0.8
+    # For Nahuelbuta 2.0
+    z_max = float(z_max)
 
     num_of_vals = 100
+
+    # For Azucar: 3.0
+    # For Nahuelbuta 5.0
+    z_scale = float(z_scale)
 
     fig = plt.figure(figsize=(10, 7))
     fig.patch.set_facecolor(bg_color)
     fig.set_facecolor(bg_color)
+
     ax = fig.add_subplot(111, projection='3d')
-    ax.set_zlim(0.0, 10.0)
+    ax.set_zlim(0.0, z_scale)
     ax.view_init(50, 45)
     ax.set_xlabel('X [km]')
     ax.set_ylabel('Y [km]')
@@ -62,11 +73,12 @@ def process(filename):
     ax.yaxis.pane.fill = False
     ax.zaxis.pane.fill = False
     ax.set_facecolor(bg_color)
+
     surface = ax.plot_surface(x, y, z, cmap=cm.terrain, linewidth=0, antialiased=True, vmin=z_min, vmax=z_max, rcount=num_of_vals, ccount=num_of_vals)
     cbar = fig.colorbar(surface, label='Elevation [km]')
-    plt.savefig('{}.png'.format(basefile), dpi=100, bbox_inches='tight')
+    
+    plt.savefig('{}.png'.format(file_base), dpi=100, bbox_inches='tight')
     plt.close()
 
-for filename in sys.argv[1:]:
-    process(filename)
-
+for filename in sys.argv[3:]:
+    process(filename, sys.argv[1], sys.argv[2])
