@@ -27,6 +27,7 @@ mpl.rcParams['savefig.facecolor'] = bg_color
 #
 # Create movie:
 # ffmpeg  -framerate 5 -i output_02%d.png -c:v libx264 -profile:v high -crf 20 -pix_fmt yuv420p -s 800x600 output.mp4
+# ffmpeg  -framerate 5 -pattern_type glob -i '*.png' -c:v libx264 -profile:v high -crf 20 -pix_fmt yuv420p -s 800x600 output.mp4
 
 
 def process(filename, z_max, z_scale):
@@ -46,13 +47,17 @@ def process(filename, z_max, z_scale):
     z_min = 0.0
 
     # For Azucar: 0.8
-    # For Nahuelbuta 2.0
+    # For Nahuelbuta: 2.0
+    # For La Campana: 3.0
+    # For Santa Gracia: 1.2
     z_max = float(z_max)
 
     num_of_vals = 100
 
     # For Azucar: 3.0
-    # For Nahuelbuta 5.0
+    # For Nahuelbuta: 5.0
+    # For La Campana: 5.0
+    # For Santa Gracia: 3.0
     z_scale = float(z_scale)
 
     fig = plt.figure(figsize=(10, 7))
@@ -76,7 +81,7 @@ def process(filename, z_max, z_scale):
 
     surface = ax.plot_surface(x, y, z, cmap=cm.terrain, linewidth=0, antialiased=True, vmin=z_min, vmax=z_max, rcount=num_of_vals, ccount=num_of_vals)
     cbar = fig.colorbar(surface, label='Elevation [km]')
-    
+
     plt.savefig('{}.png'.format(file_base), dpi=100, bbox_inches='tight')
     plt.close()
 
