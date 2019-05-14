@@ -26,8 +26,8 @@ mpl.rcParams['savefig.facecolor'] = bg_color
 # mmv 'output*__*.nc' 'output_#2.nc'
 #
 # Create movie:
-# ffmpeg  -framerate 5 -i output_02%d.png -c:v libx264 -profile:v high -crf 20 -pix_fmt yuv420p -s 800x600 output.mp4
-# ffmpeg  -framerate 5 -pattern_type glob -i '*.png' -c:v libx264 -profile:v high -crf 20 -pix_fmt yuv420p -s 800x600 output.mp4
+# ffmpeg -framerate 10 -i output_02%d.png -c:v libx264 -profile:v high -crf 20 -pix_fmt yuv420p -s 800x600 output.mp4
+# ffmpeg -framerate 10 -pattern_type glob -i '*.png' -c:v libx264 -profile:v high -crf 20 -pix_fmt yuv420p -s 800x600 output.mp4
 
 
 def process(filename, z_max, z_scale):
