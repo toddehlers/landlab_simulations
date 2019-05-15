@@ -34,7 +34,7 @@ mpl.rcParams['savefig.facecolor'] = bg_color
 # ffmpeg -framerate 10 -pattern_type glob -i '*.png' -c:v libx264 -profile:v high -crf 20 -pix_fmt yuv420p -s 800x600 output.mp4
 
 
-def process(filename, z_max):
+def process(filename):
     print('processing file: {}'.format(filename))
     file_base, file_extension = os.path.splitext(filename)
 
@@ -50,11 +50,11 @@ def process(filename, z_max):
 
     z_min = 0.0
 
-    # For Azucar: 0.8
+    # For Pan de Azucar: 0.8
     # For Nahuelbuta: 2.0
     # For La Campana: 3.0
     # For Santa Gracia: 1.2
-    z_max = float(z_max)
+    z_max = 3.0
 
     num_of_vals = 200
 
@@ -82,7 +82,7 @@ def process(filename, z_max):
 
     surface = ax.plot_surface(x, y, z, cmap=cm.terrain, linewidth=0, antialiased=True, vmin=z_min, vmax=z_max, rcount=num_of_vals, ccount=num_of_vals)
     cbar_axes = fig.add_axes([0.85, 0.12, 0.03, 0.4])
-    cbar = fig.colorbar(surface, label='Elevation [km]', cax = cbar_axes)
+    cbar = fig.colorbar(surface, label='Elevation [km]', cax=cbar_axes)
 
     image_file = '{}.png'.format(file_base)
     plt.savefig(image_file, dpi=100, bbox_inches='tight')
@@ -95,5 +95,5 @@ def process(filename, z_max):
     im.save(image_file)
 
 
-for filename in sys.argv[2:]:
-    process(filename, sys.argv[1])
+for filename in sys.argv[1:]:
+    process(filename)
