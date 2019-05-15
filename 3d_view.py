@@ -1,5 +1,14 @@
 #!/usr/bin/env python
 
+# Clean up file names:
+# mmv 'output*__*.nc' 'output_#2.nc'
+#
+# Create 3D plots:
+# python3 ../../../3d_view.py 0.8 azucar/*.nc
+#
+# Create movie:
+# ffmpeg -framerate 10 -pattern_type glob -i '*.png' -c:v libx264 -profile:v high -crf 20 -pix_fmt yuv420p -s 800x600 output.mp4
+
 import sys
 import os
 
@@ -8,7 +17,6 @@ mpl.use('Agg')
 import matplotlib.pyplot as plt
 from matplotlib import cm
 from mpl_toolkits.mplot3d import Axes3D
-from matplotlib.colors import LightSource
 
 from netCDF4 import Dataset
 
@@ -25,16 +33,6 @@ mpl.rcParams['xtick.color'] = font_color
 mpl.rcParams['ytick.color'] = font_color
 mpl.rcParams['savefig.facecolor'] = bg_color
 
-# Clean up file names:
-# mmv 'output*__*.nc' 'output_#2.nc'
-#
-# python3 ../../../3d_view.py 0.8 azucar/*.nc
-#
-# Create movie:
-# ffmpeg -framerate 10 -i output_02%d.png -c:v libx264 -profile:v high -crf 20 -pix_fmt yuv420p -s 800x600 output.mp4
-# ffmpeg -framerate 10 -pattern_type glob -i '*.png' -c:v libx264 -profile:v high -crf 20 -pix_fmt yuv420p -s 800x600 output.mp4
-
-
 def process(filename):
     print('processing file: {}'.format(filename))
     file_base, file_extension = os.path.splitext(filename)
@@ -46,8 +44,6 @@ def process(filename):
     x = nc_file.variables['x'][:] * scale_factor
     y = nc_file.variables['y'][:] * scale_factor
     z = nc_file.variables['topographic__elevation'][:][0] * scale_factor
-
-    # print('x: {}, y: {}, z: {}'.format(len(x), len(y), len(z)))
 
     z_min = 0.0
 
@@ -81,15 +77,9 @@ def process(filename):
     ax.set_facecolor(bg_color)
     ax.set_zticks([])
 
-    light = LightSource(270, 45)
-    # cm.gist_earth
-    rgb = light.shade(z, cmap=cm.terrain, vert_exag=0.1, blend_mode='soft')
-    surface = ax.plot_surface(x, y, z, facecolors=rgb, linewidth=0, antialiased=True, vmin=z_min, vmax=z_max, rcount=num_of_vals, ccount=num_of_vals)
+    surface = ax.plot_surface(x, y, z, cmap=cm.terrain, linewidth=0, antialiased=True, vmin=z_min, vmax=z_max, rcount=num_of_vals, ccount=num_of_vals)
     cbar_axes = fig.add_axes([0.85, 0.12, 0.03, 0.4])
-    norm = mpl.colors.Normalize(vmin=z_min, vmax=z_max)
-    sm = plt.cm.ScalarMappable(cmap=cm.terrain, norm=norm)
-    sm.set_array([])
-    cbar = fig.colorbar(sm, label='Elevation [km]', cax=cbar_axes)
+    cbar = fig.colorbar(surface, label='Elevation [km]', cax=cbar_axes)
 
     image_file = '{}.png'.format(file_base)
     plt.savefig(image_file, dpi=100, bbox_inches='tight')
