@@ -27,6 +27,8 @@ mpl.rcParams['savefig.facecolor'] = bg_color
 # Clean up file names:
 # mmv 'output*__*.nc' 'output_#2.nc'
 #
+# python3 ../../../3d_view.py 0.8 azucar/*.nc
+#
 # Create movie:
 # ffmpeg -framerate 10 -i output_02%d.png -c:v libx264 -profile:v high -crf 20 -pix_fmt yuv420p -s 800x600 output.mp4
 # ffmpeg -framerate 10 -pattern_type glob -i '*.png' -c:v libx264 -profile:v high -crf 20 -pix_fmt yuv420p -s 800x600 output.mp4
@@ -54,7 +56,7 @@ def process(filename, z_max):
     # For Santa Gracia: 1.2
     z_max = float(z_max)
 
-    num_of_vals = 100
+    num_of_vals = 200
 
     z_scale = 10.0
 
