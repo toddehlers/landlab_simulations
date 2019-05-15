@@ -8,6 +8,7 @@ mpl.use('Agg')
 import matplotlib.pyplot as plt
 from matplotlib import cm
 from mpl_toolkits.mplot3d import Axes3D
+from matplotlib.colors import LightSource
 
 from netCDF4 import Dataset
 
@@ -80,9 +81,15 @@ def process(filename):
     ax.set_facecolor(bg_color)
     ax.set_zticks([])
 
-    surface = ax.plot_surface(x, y, z, cmap=cm.terrain, linewidth=0, antialiased=True, vmin=z_min, vmax=z_max, rcount=num_of_vals, ccount=num_of_vals)
+    light = LightSource(270, 45)
+    # cm.gist_earth
+    rgb = light.shade(z, cmap=cm.terrain, vert_exag=0.1, blend_mode='soft')
+    surface = ax.plot_surface(x, y, z, facecolors=rgb, linewidth=0, antialiased=True, vmin=z_min, vmax=z_max, rcount=num_of_vals, ccount=num_of_vals)
     cbar_axes = fig.add_axes([0.85, 0.12, 0.03, 0.4])
-    cbar = fig.colorbar(surface, label='Elevation [km]', cax=cbar_axes)
+    norm = mpl.colors.Normalize(vmin=z_min, vmax=z_max)
+    sm = plt.cm.ScalarMappable(cmap=cm.terrain, norm=norm)
+    sm.set_array([])
+    cbar = fig.colorbar(sm, label='Elevation [km]', cax=cbar_axes)
 
     image_file = '{}.png'.format(file_base)
     plt.savefig(image_file, dpi=100, bbox_inches='tight')
