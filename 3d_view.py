@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 # Clean up file names:
 # mmv 'output*__*.nc' 'output_#2.nc'
@@ -7,7 +7,7 @@
 # python3 ../../../3d_view.py 0.8 azucar/*.nc
 #
 # Create movie:
-# ffmpeg -framerate 10 -pattern_type glob -i '*.png' -c:v libx264 -profile:v high -crf 20 -pix_fmt yuv420p -s 800x600 output.mp4
+# ffmpeg -framerate 10 -pattern_type glob -i '*.png' -c:v libx264 -profile:v high -crf 20 -pix_fmt yuv420p -s 800x400 output.mp4
 
 import sys
 import os
@@ -24,8 +24,8 @@ import numpy as np
 
 from PIL import Image, ImageChops
 
-font_color = 'white'
-bg_color = 'black'
+font_color = 'black'
+bg_color = 'white'
 
 mpl.rcParams['text.color'] = font_color
 mpl.rcParams['axes.labelcolor'] = font_color
@@ -75,6 +75,8 @@ def process(filename):
     ax.yaxis.pane.fill = False
     ax.zaxis.pane.fill = False
     ax.set_facecolor(bg_color)
+    ax.zaxis.line.set_lw(0.)
+    ax.w_zaxis.line.set_lw(0.)
     ax.set_zticks([])
 
     surface = ax.plot_surface(x, y, z, cmap=cm.terrain, linewidth=0, antialiased=True, vmin=z_min, vmax=z_max, rcount=num_of_vals, ccount=num_of_vals)
