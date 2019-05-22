@@ -14,9 +14,11 @@ def process(filename):
 
     nc_file = Dataset(filename, mode='r')
 
-    x = nc_file.variables['x'][:]
-    y = nc_file.variables['y'][:]
-    z = nc_file.variables['topographic__elevation'][:][0]
+    scale = 0.0001
+
+    x = nc_file.variables['x'][:] * scale
+    y = nc_file.variables['y'][:] * scale
+    z = nc_file.variables['topographic__elevation'][:][0] * scale
 
     output_file = "{}.obj".format(file_base)
 
@@ -24,7 +26,7 @@ def process(filename):
     length2 = len(x[0])
 
     with open(output_file, 'w') as f:
-        f.write('# Creation time: {}\n'.format(datetime.now()))
+        f.write('# Creation time: {}\n'.format(datetime.datetime.now()))
         f.write('o terrain\n')
 
         for i in range(0, length1):
@@ -40,8 +42,8 @@ def process(filename):
                 f3 = ((i + 1) * length1) + j + 1
                 f4 = ((i + 1) * length1) + j + 2
 
-                f.write('f {} {} {}'.format(f1, f2, f3))
-                f.write('f {} {} {}'.format(f2, f4, f3))
+                f.write('f {} {} {}\n'.format(f1, f2, f3))
+                f.write('f {} {} {}\n'.format(f2, f4, f3))
 
 
 for filename in sys.argv[1:]:
