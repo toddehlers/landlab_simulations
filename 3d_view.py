@@ -24,8 +24,8 @@ import numpy as np
 
 from PIL import Image, ImageChops
 
-font_color = 'black'
-bg_color = 'white'
+font_color = 'white'
+bg_color = 'black'
 
 mpl.rcParams['text.color'] = font_color
 mpl.rcParams['axes.labelcolor'] = font_color
@@ -51,11 +51,11 @@ def process(filename):
     # For Nahuelbuta: 2.0
     # For La Campana: 3.0
     # For Santa Gracia: 1.2
-    z_max = 3.0
+    z_max = 4.0
 
     num_of_vals = 200
 
-    z_scale = 10.0
+    z_scale = 15.0
 
     fig = plt.figure(figsize=(10, 7))
     fig.patch.set_facecolor(bg_color)
@@ -90,7 +90,7 @@ def process(filename):
     im = Image.open(image_file)
     w, h = im.size
     im = im.crop((50, 200, w, h))
-    im = ImageChops.offset(im, 0, -25)
+    #im = ImageChops.offset(im, 0, 0)
     im.save(image_file)
 
 
