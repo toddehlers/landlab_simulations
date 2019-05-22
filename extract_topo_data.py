@@ -2,6 +2,7 @@
 
 import sys
 import os
+import datetime
 
 from netCDF4 import Dataset
 
@@ -17,15 +18,31 @@ def process(filename):
     y = nc_file.variables['y'][:]
     z = nc_file.variables['topographic__elevation'][:][0]
 
-    output_file = "{}.txt".format(file_base)
+    output_file = "{}.obj".format(file_base)
 
     length1 = len(x)
     length2 = len(x[0])
 
     with open(output_file, 'w') as f:
+        f.write('# Creation time: {}\n'.format(datetime.now()))
+        f.write('o terrain\n')
+
         for i in range(0, length1):
             for j in range(0, length2):
-                f.write('{}, {}, {}\n'.format(x[i][j], y[i][j], z[i][j]))
+                f.write('v {} {} {}\n'.format(x[i][j], y[i][j], z[i][j]))
+
+        f.write('s off\n')
+
+        for i in range(0, length1 - 1):
+            for j in range(0, length1  - 1):
+                f1 = (i * length1) + j + 1
+                f2 = (i * length1) + j + 2
+                f3 = ((i + 1) * length1) + j + 1
+                f4 = ((i + 1) * length1) + j + 2
+
+                f.write('f {} {} {}'.format(f1, f2, f3))
+                f.write('f {} {} {}'.format(f2, f4, f3))
+
 
 for filename in sys.argv[1:]:
     process(filename)
